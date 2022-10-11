@@ -19,7 +19,7 @@ export default {
     };
   },
   async created() {
-    document.title = `风机监控客户端 V${config.version}`;
+    document.title = `client-demo V${config.version}`;
   },
   methods: {
 

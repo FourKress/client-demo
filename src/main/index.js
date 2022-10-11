@@ -1,13 +1,14 @@
-import fs from 'fs';
+// import fs from 'fs';
 import path from 'path';
 import childProcess from 'child_process';
+import { decode } from 'iconv-lite';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import '../renderer/store';
 
-const tempPath = path.join(app.getPath('userData'), '/_temp');
-if (!fs.existsSync(tempPath)) {
-  fs.mkdirSync(tempPath);
-}
+// const tempPath = path.join(app.getPath('userData'), '/_temp');
+// if (!fs.existsSync(tempPath)) {
+//   fs.mkdirSync(tempPath);
+// }
 
 const PROTOCOL = 'client-demo';
 const args = [];
@@ -38,20 +39,44 @@ const winURL =
 
 ipcMain.on('start', (event) => {
   console.log('————————开始PY进程————————');
-  const workerProcess = childProcess.spawn('python3', [
-    '-u',
-    `${path.join(__dirname, './demo.py')}`,
+  event.sender.send('start', '————————开始PY进程————————');
+
+  // let pyPath = `${path.join(__static, './demo.py')}`;
+  // if (process.env.NODE_ENV !== 'development') {
+  //   pyPath = path.join(__static, '/demo.py')
+  //     .replace('\\app.asar\\dist\\electron', '');
+  // }
+  // const workerProcess = childProcess.spawn('python', [
+  //   '-u',
+  //   `${pyPath}`,
+  //   'hello python',
+  // ]);
+
+  let pyPath = `${path.join(__static, './demo.exe')}`;
+  if (process.env.NODE_ENV !== 'development') {
+    pyPath = path.join(__static, '/demo.exe')
+      .replace('\\app.asar\\dist\\electron', '');
+  }
+  const workerProcess = childProcess.spawn(`${pyPath}`, [
     'hello python',
   ]);
+
+  const encoding = 'cp936';
+  const binaryEncoding = 'binary';
+
   workerProcess.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-    event.sender.send('start', data.toString());
+    const result = decode(Buffer.from(data, binaryEncoding), encoding);
+    console.log(`stdout: ${result}`);
+    event.sender.send('start', result);
   });
   workerProcess.stderr.on('data', (data) => {
-    console.log(`stderr: ${data}`);
+    const result = decode(Buffer.from(data, binaryEncoding), encoding);
+    console.log(`stderr: ${result}`);
+    event.sender.send('start', result);
   });
   workerProcess.on('close', (code) => {
     console.log(`PY子进程已退出，退出码 ${code}`);
+    event.sender.send('start', `PY子进程已退出，退出码 ${code}`);
   });
 });
 

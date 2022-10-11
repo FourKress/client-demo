@@ -1,9 +1,9 @@
 !macro customInstall
-  DetailPrint "Register ustax-tools URI Handler"
-  DeleteRegKey HKCR "ustax-tools"
-  WriteRegStr HKCR "ustax-tools" "" "URL:ustax-tools"
-  WriteRegStr HKCR "ustax-tools" "URL Protocol" ""
-  WriteRegStr HKCR "ustax-tools\shell" "" ""
-  WriteRegStr HKCR "ustax-tools\shell\Open" "" ""
-  WriteRegStr HKCR "ustax-tools\shell\Open\command" "" "$INSTDIR\${APP_EXECUTABLE_FILENAME} %1"
+  DetailPrint "Register client-demo URI Handler"
+  DeleteRegKey HKCR "client-demo"
+  WriteRegStr HKCR "client-demo" "" "URL:client-demo"
+  WriteRegStr HKCR "client-demo" "URL Protocol" ""
+  WriteRegStr HKCR "client-demo\shell" "" ""
+  WriteRegStr HKCR "client-demo\shell\Open" "" ""
+  WriteRegStr HKCR "client-demo\shell\Open\command" "" "$INSTDIR\${APP_EXECUTABLE_FILENAME} %1"
 !macroend

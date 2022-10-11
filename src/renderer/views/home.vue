@@ -1,5 +1,5 @@
 <template>
-<div @click="start">阿斯达四大</div>
+<div @click="start">{{ tips }}</div>
 </template>
 
 <script>
@@ -7,6 +7,11 @@ import { ipcRenderer } from 'electron';
 
 export default {
   name: 'home',
+  data() {
+    return {
+      tips: '开始',
+    };
+  },
   methods: {
     start() {
       console.log(1234);
@@ -14,6 +19,7 @@ export default {
 
       ipcRenderer.on('start', (event, data) => {
         console.log(event, data);
+        this.tips = data;
       });
     },
   },

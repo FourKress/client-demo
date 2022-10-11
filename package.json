@@ -19,8 +19,8 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "风机监控客户端",
-    "appId": "xxxx",
+    "productName": "client-demo",
+    "appId": "com.cn.clien.demo",
     "directories": {
       "output": "build"
     },
@@ -48,18 +48,22 @@
         }
       ]
     },
+    "win": {
+      "target": "nsis"
+    },
     "nsis": {
       "include": "./urlProtoco.nsh"
     }
   },
-  "engines" : {
-    "node" : ">=14.17.6"
+  "engines": {
+    "node": ">=14.17.6"
   },
   "dependencies": {
     "electron-edge-js": "^14.16.1",
     "electron-store": "7",
     "electron-updater": "^4.3.9",
     "element-ui": "^2.4.4",
+    "iconv-lite": "^0.6.3",
     "json-bigint": "^1.0.0",
     "jszip": "^3.7.1",
     "lodash": "^4.17.21",
