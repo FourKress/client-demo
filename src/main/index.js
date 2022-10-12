@@ -1,14 +1,9 @@
-// import fs from 'fs';
+import fs from 'fs';
 import path from 'path';
 import childProcess from 'child_process';
 import { decode } from 'iconv-lite';
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import '../renderer/store';
-
-// const tempPath = path.join(app.getPath('userData'), '/_temp');
-// if (!fs.existsSync(tempPath)) {
-//   fs.mkdirSync(tempPath);
-// }
 
 const PROTOCOL = 'client-demo';
 const args = [];
@@ -37,46 +32,66 @@ const winURL =
     ? 'http://localhost:9080'
     : `file://${__dirname}/index.html`;
 
-ipcMain.on('start', (event) => {
+ipcMain.on('open-directory-dialog', (event, args) => {
+  dialog
+    .showOpenDialog({
+      properties: [args],
+      title: '请选择保存目录',
+      buttonLabel: '选择',
+    })
+    .then((result) => {
+      event.sender.send('selectFilePath', result.filePaths[0]);
+    });
+});
+
+ipcMain.on('getResult', (event, args) => {
+  fs.readFile(`${args[0]}/demo_fig.jpg`, (err, data) => {
+    if (err) return;
+    const b64 = Buffer.from(data).toString('base64');
+    event.sender.send('result', `data:image/jpg;base64,${b64}`);
+  });
+});
+
+ipcMain.on('start', (event, args) => {
   console.log('————————开始PY进程————————');
-  event.sender.send('start', '————————开始PY进程————————');
+  const [index, ...params] = args;
+  console.log(`参数: ${args}`);
 
-  // let pyPath = `${path.join(__static, './demo.py')}`;
-  // if (process.env.NODE_ENV !== 'development') {
-  //   pyPath = path.join(__static, '/demo.py')
-  //     .replace('\\app.asar\\dist\\electron', '');
-  // }
-  // const workerProcess = childProcess.spawn('python', [
-  //   '-u',
-  //   `${pyPath}`,
-  //   'hello python',
-  // ]);
+  event.sender.send(`start_${args}`, '————————开始PY进程————————');
 
-  let pyPath = `${path.join(__static, './demo.exe')}`;
+  let pyPath = `${path.join(__static, './demo.py')}`;
   if (process.env.NODE_ENV !== 'development') {
-    pyPath = path.join(__static, '/demo.exe')
+    pyPath = path
+      .join(__static, '/demo.py')
       .replace('\\app.asar\\dist\\electron', '');
   }
-  const workerProcess = childProcess.spawn(`${pyPath}`, [
-    'hello python',
-  ]);
+  const workerProcess = childProcess.spawn('python', [`${pyPath}`, ...params]);
+
+  // let pyPath = `${path.join(__static, './demo.exe')}`;
+  // if (process.env.NODE_ENV !== 'development') {
+  //   pyPath = path.join(__static, '/demo.exe')
+  //     .replace('\\app.asar\\dist\\electron', '');
+  // }
+  // const workerProcess = childProcess.spawn(`${pyPath}`, [
+  //   'hello python',
+  // ]);
 
   const encoding = 'cp936';
   const binaryEncoding = 'binary';
 
   workerProcess.stdout.on('data', (data) => {
     const result = decode(Buffer.from(data, binaryEncoding), encoding);
-    console.log(`stdout: ${result}`);
-    event.sender.send('start', result);
+    console.log(`stdout: ${result.toString()}`);
+    event.sender.send(`stdout_${index}`, data.toString());
   });
   workerProcess.stderr.on('data', (data) => {
     const result = decode(Buffer.from(data, binaryEncoding), encoding);
     console.log(`stderr: ${result}`);
-    event.sender.send('start', result);
+    event.sender.send(`stderr_${index}`, data.toString());
   });
   workerProcess.on('close', (code) => {
     console.log(`PY子进程已退出，退出码 ${code}`);
-    event.sender.send('start', `PY子进程已退出，退出码 ${code}`);
+    event.sender.send(`close_${index}`, `PY子进程已退出，退出码 ${code}`);
   });
 });
 

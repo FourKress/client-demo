@@ -28,27 +28,12 @@ export default {
 </script>
 
 <style lang="less">
+* {
+  margin: 0;
+  padding: 0;
+}
 #app {
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  font-family: PingFangSC-Regular, PingFang SC;
 
-  .container {
-    width: 100%;
-    height: 100%;
-
-    .content{
-      flex: 1;
-      display: flex;
-      height: calc(100vh - 88px);
-      overflow: hidden;
-      .main{
-        flex: 1;
-        height: 100%;
-        overflow-y: auto;
-      }
-    }
-  }
 }
 </style>
