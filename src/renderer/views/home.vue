@@ -3,11 +3,11 @@
     <div class="left">
 
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
-        <el-form-item label="迭代次数" prop="times">
-          <el-input v-model="form.times"></el-input>
+        <el-form-item label="迭代次数" prop="count">
+          <el-input v-model="form.count"></el-input>
         </el-form-item>
-        <el-form-item label="迭代间隔" prop="interval">
-          <el-input v-model="form.interval"></el-input>
+        <el-form-item label="迭代时间" prop="time">
+          <el-input v-model="form.time"></el-input>
         </el-form-item>
         <el-form-item label="文件保存地址" prop="filePath">
           <el-input v-model="form.filePath"></el-input>
@@ -15,10 +15,10 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="onStart">开始计算</el-button>
+          <el-button type="primary" @click="onStart" :disabled="isStart">开始计算</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onUpdate">更新结果</el-button>
+          <el-button type="primary" @click="onUpdate" :disabled="!isResult">更新结果</el-button>
         </el-form-item>
 
         <el-form-item>
@@ -44,22 +44,23 @@ export default {
       tips: '未开始',
       startCount: 0,
       form: {
-        filePath: '/Users/wudong/Downloads/temp',
-        times: 10,
-        interval: 1,
+        filePath: '',
+        time: 5,
+        count: 10,
       },
       rules: {
-        times: [
+        count: [
           { required: true, message: '请输入迭代次数', trigger: 'blur' },
         ],
-        interval: [
-          { required: true, message: '请输入迭代间隔', trigger: 'change' },
+        time: [
+          { required: true, message: '请输入迭代时间', trigger: 'change' },
         ],
         filePath: [
-          { required: true, message: '请选择文件间隔', trigger: 'change' },
+          { required: true, message: '请选择文件保存地址', trigger: 'change' },
         ],
       },
       isStart: false,
+      isResult: false,
       imgUrl: '',
     };
   },
@@ -76,9 +77,10 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.isStart = true;
+          this.isResult = false;
           this.startCount++;
-          const { times, interval, filePath } = this.form;
-          ipcRenderer.send('start', [this.startCount, times, interval, filePath]);
+          const { count, time, filePath } = this.form;
+          ipcRenderer.send('start', [this.startCount, count, time, filePath]);
 
           ipcRenderer.once(`start_${this.startCount}`, (event, data) => {
             console.log(event, data);
@@ -87,6 +89,7 @@ export default {
 
           ipcRenderer.on(`stdout_${this.startCount}`, (event, data) => {
             console.log(event, data);
+            this.isResult = true;
           });
 
           ipcRenderer.on(`stderr_${this.startCount}`, (event, data) => {
@@ -97,16 +100,13 @@ export default {
           ipcRenderer.once(`close_${this.startCount}`, (event, data) => {
             console.log(event, data);
             this.tips = data;
+            this.isStart = false;
           });
         }
       });
     },
 
     onUpdate() {
-      if (!this.isStart) {
-        this.$message.warning('请先开始计算');
-      }
-
       ipcRenderer.send('getResult', [this.form.filePath]);
       ipcRenderer.once('result', (event, data) => {
         console.log(event, data);

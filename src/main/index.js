@@ -57,24 +57,24 @@ ipcMain.on('start', (event, args) => {
   const [index, ...params] = args;
   console.log(`参数: ${args}`);
 
-  event.sender.send(`start_${args}`, '————————开始PY进程————————');
+  event.sender.send(`start_${index}`, '开始PY子进程, 计算中....');
 
-  let pyPath = `${path.join(__static, './demo.py')}`;
-  if (process.env.NODE_ENV !== 'development') {
-    pyPath = path
-      .join(__static, '/demo.py')
-      .replace('\\app.asar\\dist\\electron', '');
-  }
-  const workerProcess = childProcess.spawn('python', [`${pyPath}`, ...params]);
-
-  // let pyPath = `${path.join(__static, './demo.exe')}`;
+  // let pyPath = `${path.join(__static, './demo.py')}`;
   // if (process.env.NODE_ENV !== 'development') {
-  //   pyPath = path.join(__static, '/demo.exe')
+  //   pyPath = path
+  //     .join(__static, '/demo.py')
   //     .replace('\\app.asar\\dist\\electron', '');
   // }
-  // const workerProcess = childProcess.spawn(`${pyPath}`, [
-  //   'hello python',
-  // ]);
+  // const workerProcess = childProcess.spawn('python', [`${pyPath}`, ...params]);
+
+  let pyPath = `${path.join(__static, './demo.exe')}`;
+  if (process.env.NODE_ENV !== 'development') {
+    pyPath = path.join(__static, '/demo.exe')
+      .replace('\\app.asar\\dist\\electron', '');
+  }
+  const workerProcess = childProcess.spawn(`${pyPath}`, [
+    ...params,
+  ]);
 
   const encoding = 'cp936';
   const binaryEncoding = 'binary';
@@ -82,12 +82,12 @@ ipcMain.on('start', (event, args) => {
   workerProcess.stdout.on('data', (data) => {
     const result = decode(Buffer.from(data, binaryEncoding), encoding);
     console.log(`stdout: ${result.toString()}`);
-    event.sender.send(`stdout_${index}`, data.toString());
+    event.sender.send(`stdout_${index}`, result.toString());
   });
   workerProcess.stderr.on('data', (data) => {
     const result = decode(Buffer.from(data, binaryEncoding), encoding);
     console.log(`stderr: ${result}`);
-    event.sender.send(`stderr_${index}`, data.toString());
+    event.sender.send(`stderr_${index}`, result.toString());
   });
   workerProcess.on('close', (code) => {
     console.log(`PY子进程已退出，退出码 ${code}`);
