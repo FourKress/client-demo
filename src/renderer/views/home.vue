@@ -1,7 +1,6 @@
 <template>
   <div class="main">
     <div class="left">
-
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="迭代次数" prop="count">
           <el-input v-model="form.count"></el-input>
@@ -11,27 +10,29 @@
         </el-form-item>
         <el-form-item label="文件保存地址" prop="filePath">
           <el-input v-model="form.filePath"></el-input>
-          <el-button type="primary" @click="onSelect" style="margin-top: 10px">选择文件保存地址</el-button>
+          <el-button type="primary" @click="onSelect" style="margin-top: 10px"
+            >选择文件保存地址</el-button
+          >
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="onStart" :disabled="isStart">开始计算</el-button>
+          <el-button type="primary" @click="onStart" :disabled="isStart"
+            >开始计算</el-button
+          >
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onUpdate" :disabled="!isResult">更新结果</el-button>
+          <el-button type="primary" @click="onUpdate" :disabled="!isResult"
+            >更新结果</el-button
+          >
         </el-form-item>
 
-        <el-form-item>
-          运行过程提示: {{tips}}
-        </el-form-item>
+        <el-form-item> 运行过程提示: {{ tips }} </el-form-item>
       </el-form>
-
     </div>
     <div class="right">
-      <img :src="imgUrl" alt="">
+      <img :src="imgUrl" alt="" />
     </div>
   </div>
-
 </template>
 
 <script>
@@ -44,14 +45,12 @@ export default {
       tips: '未开始',
       startCount: 0,
       form: {
-        filePath: '',
+        filePath: '/Users/wudong/Downloads/temp',
         time: 5,
         count: 10,
       },
       rules: {
-        count: [
-          { required: true, message: '请输入迭代次数', trigger: 'blur' },
-        ],
+        count: [{ required: true, message: '请输入迭代次数', trigger: 'blur' }],
         time: [
           { required: true, message: '请输入迭代时间', trigger: 'change' },
         ],
@@ -80,7 +79,14 @@ export default {
           this.isResult = false;
           this.startCount++;
           const { count, time, filePath } = this.form;
-          ipcRenderer.send('start', [this.startCount, count, time, filePath]);
+          ipcRenderer.send('start', [
+            this.startCount,
+            {
+              count,
+              time,
+              filePath,
+            },
+          ]);
 
           ipcRenderer.once(`start_${this.startCount}`, (event, data) => {
             console.log(event, data);

@@ -53,28 +53,36 @@ ipcMain.on('getResult', (event, args) => {
 });
 
 ipcMain.on('start', (event, args) => {
+  const [index, params] = args;
+  console.log(`参数1: ${index}`);
+  console.log(`参数2: ${JSON.stringify(params)}`);
   console.log('————————开始PY进程————————');
-  const [index, ...params] = args;
-  console.log(`参数: ${args}`);
 
   event.sender.send(`start_${index}`, '开始PY子进程, 计算中....');
 
-  // let pyPath = `${path.join(__static, './demo.py')}`;
-  // if (process.env.NODE_ENV !== 'development') {
-  //   pyPath = path
-  //     .join(__static, '/demo.py')
-  //     .replace('\\app.asar\\dist\\electron', '');
-  // }
-  // const workerProcess = childProcess.spawn('python', [`${pyPath}`, ...params]);
-
-  let pyPath = `${path.join(__static, './demo.exe')}`;
+  let pyPath = `${path.join(__static, './demo.py')}`;
   if (process.env.NODE_ENV !== 'development') {
-    pyPath = path.join(__static, '/demo.exe')
+    pyPath = path
+      .join(__static, '/demo.py')
       .replace('\\app.asar\\dist\\electron', '');
   }
-  const workerProcess = childProcess.spawn(`${pyPath}`, [
-    ...params,
+  const workerProcess = childProcess.spawn('python', [
+    `${pyPath}`,
+    `${JSON.stringify({
+      ...params,
+      num_set: params.count,
+      dir_work: params.filePath,
+    })}`,
   ]);
+
+  // let pyPath = `${path.join(__static, './demo.exe')}`;
+  // if (process.env.NODE_ENV !== 'development') {
+  //   pyPath = path.join(__static, '/demo.exe')
+  //     .replace('\\app.asar\\dist\\electron', '');
+  // }
+  // const workerProcess = childProcess.spawn(`${pyPath}`, [
+  //   ...params,
+  // ]);
 
   const encoding = 'cp936';
   const binaryEncoding = 'binary';
