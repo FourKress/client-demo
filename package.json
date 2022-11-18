@@ -50,9 +50,6 @@
     },
     "win": {
       "target": "nsis"
-    },
-    "nsis": {
-      "include": "./urlProtoco.nsh"
     }
   },
   "engines": {
