@@ -3,18 +3,6 @@ import path from 'path';
 import childProcess from 'child_process';
 import { decode } from 'iconv-lite';
 import { app, BrowserWindow, ipcMain, dialog } from 'electron';
-import '../renderer/store';
-
-const PROTOCOL = 'client-demo';
-const args = [];
-if (!app.isPackaged) {
-  // 如果是开发阶段，需要把我们的脚本的绝对路径加入参数中
-  args.push(path.resolve('./urlProtoco.nsh'));
-}
-// 加一个 `--` 以确保后面的参数不被 Electron 处理
-args.push('--');
-// 注册协议
-app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, args);
 
 /**
  * Set `__static` path to static files in production
