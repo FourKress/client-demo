@@ -131,12 +131,11 @@ export default {
 
 <style scoped lang="less">
 .main {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
 
   .tabs {
-    width: 100%;
   }
 }
 </style>
