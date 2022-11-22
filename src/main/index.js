@@ -48,18 +48,18 @@ ipcMain.on('start', (event, args) => {
 
   event.sender.send(`start_${index}`, '开始PY子进程, 计算中....');
 
-  let pyPath = `${path.join(__static, './demo.py')}`;
+  let pyPath = `${path.join(__static, './FarmZone_2022_11_13_serial.py')}`;
   if (process.env.NODE_ENV !== 'development') {
     pyPath = path
-      .join(__static, '/demo.py')
+      .join(__static, '/FarmZone_2022_11_13_serial.py')
       .replace('\\app.asar\\dist\\electron', '');
   }
   const workerProcess = childProcess.spawn('python', [
     `${pyPath}`,
     `${JSON.stringify({
       ...params,
-      num_set: params.count,
-      dir_work: params.filePath,
+      num_set: [222, 333, 4444],
+      dir_work: '/Users/wudong/Desktop',
     })}`,
   ]);
 

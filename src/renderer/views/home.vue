@@ -1,130 +1,165 @@
 <template>
   <div class="main">
     <el-tabs type="border-card" class="tabs">
-      <el-tab-pane label="用户管理">用户管理</el-tab-pane>
-      <el-tab-pane label="配置管理">配置管理</el-tab-pane>
-      <el-tab-pane label="角色管理">角色管理</el-tab-pane>
-      <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+      <el-tab-pane :label="tabs[0]">
+        <PanelFirst ref="PanelFirst" />
+      </el-tab-pane>
+      <el-tab-pane :label="tabs[1]">
+        <PanelSecond ref="PanelSecond" />
+      </el-tab-pane>
+      <el-tab-pane :label="tabs[2]">
+        <PanelThird ref="PanelThird" @start="handleStart" />
+      </el-tab-pane>
+      <el-tab-pane :label="tabs[3]">
+        <PanelFour ref="PanelFour" />
+      </el-tab-pane>
     </el-tabs>
-<!--    <div class="left">-->
-<!--      <el-form ref="form" :model="form" :rules="rules" label-width="110px">-->
-<!--        <el-form-item label="迭代次数" prop="count">-->
-<!--          <el-input v-model="form.count"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="迭代时间" prop="time">-->
-<!--          <el-input v-model="form.time"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="文件保存地址" prop="filePath">-->
-<!--          <el-input v-model="form.filePath"></el-input>-->
-<!--          <el-button type="primary" @click="onSelect" style="margin-top: 10px"-->
-<!--            >选择文件保存地址</el-button-->
-<!--          >-->
-<!--        </el-form-item>-->
 
-<!--        <el-form-item>-->
-<!--          <el-button type="primary" @click="onStart" :disabled="isStart"-->
-<!--            >开始计算</el-button-->
-<!--          >-->
-<!--        </el-form-item>-->
-<!--        <el-form-item>-->
-<!--          <el-button type="primary" @click="onUpdate" :disabled="!isResult"-->
-<!--            >更新结果</el-button-->
-<!--          >-->
-<!--        </el-form-item>-->
+    <div class="dynamic-output">
+      <p v-for="(msg, index) in msgList" :key="index">{{ msg }} {{index}}</p>
+    </div>
 
-<!--        <el-form-item> 运行过程提示: {{ tips }} </el-form-item>-->
-<!--      </el-form>-->
-<!--    </div>-->
-<!--    <div class="right">-->
-<!--      <img :src="imgUrl" alt="" />-->
-<!--    </div>-->
+    <el-button type="text" class="import-btn" @click="dialogVisible = true">
+      导入历史配置
+    </el-button>
+    <el-dialog
+      title="导入历史配置"
+      :visible.sync="dialogVisible"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      @close="closeDialog"
+    >
+      <el-form ref="form" :model="form">
+        <el-form-item
+          label="配置文件"
+          label-width="150"
+          prop="historyConfig"
+          :rules="[
+            {
+              required: true,
+              message: '请选择',
+              trigger: ['blur', 'change'],
+            },
+          ]"
+        >
+          <el-button type="primary" @click="onSelectOnly('historyConfig')">
+            选择
+          </el-button>
+          <el-tag
+            v-if="form.historyConfig"
+            closable
+            @close="handlePathCloseOnly('historyConfig')"
+            type="success"
+          >
+            {{ form.historyConfig }}
+          </el-tag>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="closeDialog">取 消</el-button>
+        <el-button type="primary" @click="handleImportHistoryConfig">
+          确 定
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { ipcRenderer } from 'electron';
+import PanelFirst from '../components/panel-first';
+import PanelSecond from '../components/panel-second';
+import PanelThird from '../components/panel-third';
+import PanelFour from '../components/panel-four';
+import Mixins from '../mixins';
 
 export default {
   name: 'home',
+  components: {
+    PanelFirst,
+    PanelSecond,
+    PanelThird,
+    PanelFour,
+  },
+  mixins: [Mixins],
   data() {
     return {
-      tips: '未开始',
       startCount: 0,
+      tabs: ['风机设置', '计算域设置', '优化器设置', '图形显示'],
+      dialogVisible: false,
       form: {
-        filePath: '/Users/wudong/Downloads/temp',
-        time: 5,
-        count: 10,
+        historyConfig: '',
       },
-      rules: {
-        count: [{ required: true, message: '请输入迭代次数', trigger: 'blur' }],
-        time: [
-          { required: true, message: '请输入迭代时间', trigger: 'change' },
-        ],
-        filePath: [
-          { required: true, message: '请选择文件保存地址', trigger: 'change' },
-        ],
-      },
-      isStart: false,
-      isResult: false,
-      imgUrl: '',
+      msgList: [],
     };
   },
   methods: {
-    onSelect() {
-      ipcRenderer.send('open-directory-dialog', 'openDirectory');
-
-      ipcRenderer.once('selectFilePath', (e, file) => {
-        this.form.filePath = file;
-      });
+    closeDialog() {
+      this.$refs.form.resetFields();
+      this.$refs.form.clearValidate();
+      this.dialogVisible = false;
     },
-
-    onStart() {
+    handleImportHistoryConfig() {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          this.isStart = true;
-          this.isResult = false;
-          this.startCount++;
-          const { count, time, filePath } = this.form;
-          ipcRenderer.send('start', [
-            this.startCount,
-            {
-              count,
-              time,
-              filePath,
-            },
-          ]);
-
-          ipcRenderer.once(`start_${this.startCount}`, (event, data) => {
-            console.log(event, data);
-            this.tips = data;
-          });
-
-          ipcRenderer.on(`stdout_${this.startCount}`, (event, data) => {
-            console.log(event, data);
-            this.isResult = true;
-          });
-
-          ipcRenderer.on(`stderr_${this.startCount}`, (event, data) => {
-            console.log(event, data);
-            this.tips = data;
-          });
-
-          ipcRenderer.once(`close_${this.startCount}`, (event, data) => {
-            console.log(event, data);
-            this.tips = data;
-            this.isStart = false;
-          });
+          this.closeDialog();
         }
       });
     },
+    handleStart(isContinue) {
+      console.log(isContinue);
+      Promise.all([
+        this.$refs.PanelFirst.validate(),
+        this.$refs.PanelSecond.validate(),
+        this.$refs.PanelThird.validate(),
+      ]).then((values) => {
+        console.log(values);
+        const errorIndex = values.findIndex((d) => !d);
+        this.$message.error(`请完善 ${this.tabs[errorIndex]} 的配置项`);
 
-    onUpdate() {
-      ipcRenderer.send('getResult', [this.form.filePath]);
-      ipcRenderer.once('result', (event, data) => {
-        console.log(event, data);
-        this.imgUrl = data;
+        setInterval(() => {
+          this.msgList.push(`${Date.now()}会计师开发贷款瑟瑟发抖凯会计师开发贷款瑟瑟发抖凯撒的飞机算啦放大发多少两节课开始了金飞达进啦萨达开发会计师开发贷款瑟瑟发抖凯撒的飞机算啦放大发多少两节课开始了金飞达进啦萨达开发撒的飞机算啦放大发多少两节课开始了金飞达进啦萨达开发`);
+          if (this.msgList.length > 200) {
+            this.msgList.splice(0, 1);
+          }
+        }, 20);
       });
     },
+    onStart() {
+      this.startCount++;
+      ipcRenderer.send('start', [
+        this.startCount,
+        {
+          count: 1,
+          time: 1,
+          filePath: 1,
+        },
+      ]);
+
+      ipcRenderer.once(`start_${this.startCount}`, (event, data) => {
+        console.log(event, data);
+      });
+
+      ipcRenderer.on(`stdout_${this.startCount}`, (event, data) => {
+        console.log(event, data);
+      });
+
+      ipcRenderer.on(`stderr_${this.startCount}`, (event, data) => {
+        console.log(event, data);
+      });
+
+      ipcRenderer.once(`close_${this.startCount}`, (event, data) => {
+        console.log(event, data);
+      });
+    },
+    //
+    // onUpdate() {
+    //   ipcRenderer.send('getResult', [this.form.filePath]);
+    //   ipcRenderer.once('result', (event, data) => {
+    //     console.log(event, data);
+    //     this.imgUrl = data;
+    //   });
+    // },
   },
 };
 </script>
@@ -135,7 +170,53 @@ export default {
   height: 100%;
   box-sizing: border-box;
 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
   .tabs {
+    width: 100%;
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    /deep/ .el-tabs__content {
+      flex: 1;
+      height: 100%;
+
+      .el-tab-pane {
+        height: 100%;
+      }
+    }
   }
+
+  .dynamic-output {
+    width: 100%;
+    min-height: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    border: 16px solid #e4e7ed;
+
+    background-color: #fff;
+    color: #333;
+  }
+
+  .import-btn {
+    position: fixed;
+    right: 12px;
+    top: 4px;
+  }
+}
+</style>
+
+<style>
+.el-tag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 6px 0;
 }
 </style>

@@ -2,20 +2,18 @@ module.exports = {
   root: true,
   parser: 'babel-eslint',
   parserOptions: {
-    sourceType: 'module'
+    sourceType: 'module',
   },
   env: {
     browser: true,
-    node: true
+    node: true,
   },
   extends: 'airbnb-base',
   globals: {
-    __static: true
+    __static: true,
   },
-  plugins: [
-    'html'
-  ],
-  'rules': {
+  plugins: ['html'],
+  rules: {
     'no-console': 'off',
     'global-require': 0,
     'import/no-unresolved': 0,
@@ -27,10 +25,13 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'class-methods-use-this': 'off',
-    'linebreak-style': [0 ,"error", "windows"],
+    'linebreak-style': [0, 'error', 'windows'],
     'no-plusplus': 'off',
     'prefer-destructuring': 'off',
     'no-underscore-dangle': 'off',
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
-  }
-}
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'arrow-parens': 0,
+    camelcase: 0,
+    'no-unused-expressions': 0,
+  },
+};

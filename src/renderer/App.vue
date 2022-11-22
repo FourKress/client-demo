@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <div class="container">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -10,7 +8,7 @@
 import config from '../../package.json';
 
 export default {
-  name: 'client-demo',
+  name: 'App',
   components: {
   },
   data() {
@@ -19,7 +17,7 @@ export default {
     };
   },
   async created() {
-    document.title = `client-demo V${config.version}`;
+    document.title = `风电场优化软件 V${config.version}`;
   },
   methods: {
 
@@ -31,6 +29,10 @@ export default {
 * {
   margin: 0;
   padding: 0;
+}
+html, body {
+  width: 100%;
+  height: 100%;
 }
 #app {
   height: 100%;

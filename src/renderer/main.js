@@ -8,7 +8,7 @@ import store from './store';
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'));
 Vue.config.productionTip = false;
 
-Vue.use(ElementUI);
+Vue.use(ElementUI, { size: 'small' });
 
 /* eslint-disable no-new */
 new Vue({

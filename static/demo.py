@@ -51,7 +51,7 @@ pass
 
 
 # Step 1: User set an int number
-num_set = params['num_set']
+num_set = int(params['num_set'][2])
 
 # Step 2: User set the directory
 
