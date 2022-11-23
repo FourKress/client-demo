@@ -24,7 +24,7 @@ ipcMain.on('open-directory-dialog', (event, args) => {
   dialog
     .showOpenDialog({
       properties: [args],
-      title: '请选择保存目录',
+      title: '请选择文件路径',
       buttonLabel: '选择',
     })
     .then((result) => {
@@ -46,20 +46,17 @@ ipcMain.on('start', (event, args) => {
   console.log(`参数2: ${JSON.stringify(params)}`);
   console.log('————————开始PY进程————————');
 
-  event.sender.send(`start_${index}`, '开始PY子进程, 计算中....');
-
-  let pyPath = `${path.join(__static, './FarmZone_2022_11_13_serial.py')}`;
+  // let pyPath = `${path.join(__static, './FarmZone_2022_11_13_serial.py')}`;
+  let pyPath = '/Users/wudong/Works/python/FarmZone_2022_11_13_serial.py';
   if (process.env.NODE_ENV !== 'development') {
     pyPath = path
       .join(__static, '/FarmZone_2022_11_13_serial.py')
       .replace('\\app.asar\\dist\\electron', '');
   }
-  const workerProcess = childProcess.spawn('python', [
+  const workerProcess = childProcess.spawn('python3', [
     `${pyPath}`,
     `${JSON.stringify({
       ...params,
-      num_set: [222, 333, 4444],
-      dir_work: '/Users/wudong/Desktop',
     })}`,
   ]);
 

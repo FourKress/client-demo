@@ -2,24 +2,29 @@
   <div class="main">
     <el-tabs type="border-card" class="tabs">
       <el-tab-pane :label="tabs[0]">
-        <PanelFirst ref="PanelFirst" />
+        <PanelFirst ref="PanelFirst" :isStart="isStart" />
       </el-tab-pane>
       <el-tab-pane :label="tabs[1]">
-        <PanelSecond ref="PanelSecond" />
+        <PanelSecond ref="PanelSecond" :isStart="isStart" />
       </el-tab-pane>
       <el-tab-pane :label="tabs[2]">
-        <PanelThird ref="PanelThird" @start="handleStart" />
+        <PanelThird ref="PanelThird" @start="handleStart" :isStart="isStart" />
       </el-tab-pane>
       <el-tab-pane :label="tabs[3]">
-        <PanelFour ref="PanelFour" />
+        <PanelFour ref="PanelFour" :isStart="isStart" />
       </el-tab-pane>
     </el-tabs>
 
     <div class="dynamic-output">
-      <p v-for="(msg, index) in msgList" :key="index">{{ msg }} {{index}}</p>
+      <p v-for="(msg, index) in msgList" :key="index">{{ msg }} {{ index }}</p>
     </div>
 
-    <el-button type="text" class="import-btn" @click="dialogVisible = true">
+    <el-button
+      type="text"
+      :disabled="isStart"
+      class="import-btn"
+      @click="dialogVisible = true"
+    >
       导入历史配置
     </el-button>
     <el-dialog
@@ -91,7 +96,15 @@ export default {
         historyConfig: '',
       },
       msgList: [],
+      isStart: false,
     };
+  },
+  watch: {
+    msgList(val) {
+      if (val.length > 200) {
+        this.msgList.splice(0, 1);
+      }
+    },
   },
   methods: {
     closeDialog() {
@@ -108,48 +121,57 @@ export default {
     },
     handleStart(isContinue) {
       console.log(isContinue);
+      this.isStart = true;
       Promise.all([
         this.$refs.PanelFirst.validate(),
         this.$refs.PanelSecond.validate(),
         this.$refs.PanelThird.validate(),
       ]).then((values) => {
         console.log(values);
-        const errorIndex = values.findIndex((d) => !d);
-        this.$message.error(`请完善 ${this.tabs[errorIndex]} 的配置项`);
+        const errorIndex = values.findIndex((d) => !d.valid);
+        if (errorIndex !== -1) {
+          this.$message.error(`请完善 ${this.tabs[errorIndex]} 的配置项`);
+          return;
+        }
 
-        setInterval(() => {
-          this.msgList.push(`${Date.now()}会计师开发贷款瑟瑟发抖凯会计师开发贷款瑟瑟发抖凯撒的飞机算啦放大发多少两节课开始了金飞达进啦萨达开发会计师开发贷款瑟瑟发抖凯撒的飞机算啦放大发多少两节课开始了金飞达进啦萨达开发撒的飞机算啦放大发多少两节课开始了金飞达进啦萨达开发`);
-          if (this.msgList.length > 200) {
-            this.msgList.splice(0, 1);
+        let formAll = {};
+        values.forEach((v) => {
+          formAll = {
+            ...formAll,
+            ...v.form,
+          };
+        });
+        const params = {
+          flag_optimizer_status: isContinue ? 'continue' : 'initialize',
+        };
+        Object.keys(formAll).forEach((k) => {
+          if (formAll[k] !== undefined) {
+            params[k] = formAll[k];
           }
-        }, 20);
+        });
+        console.log(params);
+
+        this.onStart(params);
       });
     },
-    onStart() {
+    onStart(params) {
+      this.msgList = [];
       this.startCount++;
-      ipcRenderer.send('start', [
-        this.startCount,
-        {
-          count: 1,
-          time: 1,
-          filePath: 1,
-        },
-      ]);
-
-      ipcRenderer.once(`start_${this.startCount}`, (event, data) => {
-        console.log(event, data);
-      });
+      ipcRenderer.send('start', [this.startCount, params]);
 
       ipcRenderer.on(`stdout_${this.startCount}`, (event, data) => {
         console.log(event, data);
+        this.msgList.push(data);
       });
 
       ipcRenderer.on(`stderr_${this.startCount}`, (event, data) => {
         console.log(event, data);
+        this.msgList.push(data);
       });
 
       ipcRenderer.once(`close_${this.startCount}`, (event, data) => {
         console.log(event, data);
+        this.msgList.push(data);
       });
     },
     //

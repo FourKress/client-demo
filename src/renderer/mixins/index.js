@@ -2,8 +2,8 @@ import { ipcRenderer } from 'electron';
 
 export default {
   methods: {
-    onSelect(key) {
-      ipcRenderer.send('open-directory-dialog', 'openDirectory');
+    onSelect(key, type = 'openFile') {
+      ipcRenderer.send('open-directory-dialog', type);
       ipcRenderer.once('selectFilePath', (e, file) => {
         if (!file) return;
         const list = this.form[key];
@@ -16,8 +16,8 @@ export default {
       });
     },
 
-    onSelectOnly(key) {
-      ipcRenderer.send('open-directory-dialog', 'openDirectory');
+    onSelectOnly(key, type = 'openFile') {
+      ipcRenderer.send('open-directory-dialog', type);
       ipcRenderer.once('selectFilePath', (e, file) => {
         if (!file) return;
         this.form[key] = file;

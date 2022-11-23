@@ -8,39 +8,40 @@
       label-width="150px"
     >
       <div class="left">
-        <el-form-item label="选择工作目录" prop="parameters_turbine">
-          <el-button type="primary" @click="onSelectOnly('parameters_turbine')">
+        <el-form-item label="选择工作目录" prop="dir_working">
+          <el-button type="primary" :disabled="isStart" @click="onSelectOnly('dir_working', 'openDirectory')">
             选择
           </el-button>
           <el-tag
-            v-if="form.parameters_turbine"
-            closable
-            @close="handlePathCloseOnly('parameters_turbine')"
+            v-if="form.dir_working"
+            :closable="!isStart"
+            @close="handlePathCloseOnly('dir_working')"
           >
-            {{ form.parameters_turbine }}
+            {{ form.dir_working }}
           </el-tag>
         </el-form-item>
 
         <el-form-item label="num_opt_iteration" prop="num_opt_iteration">
-          <el-input v-model="form.num_opt_iteration"></el-input>
+          <el-input :disabled="isStart" v-model="form.num_opt_iteration"></el-input>
         </el-form-item>
         <el-form-item label="step_check" prop="step_check">
-          <el-input v-model="form.step_check"></el-input>
+          <el-input :disabled="isStart" v-model="form.step_check"></el-input>
         </el-form-item>
         <el-form-item label="name_to_save" prop="name_to_save">
-          <el-input v-model="form.name_to_save"></el-input>
+          <el-input :disabled="isStart" v-model="form.name_to_save"></el-input>
         </el-form-item>
         <el-form-item label="name_to_load" prop="name_to_load">
-          <el-input v-model="form.name_to_load"></el-input>
+          <el-input :disabled="isStart" v-model="form.name_to_load"></el-input>
         </el-form-item>
       </div>
       <div class="right">
         <el-form-item
           label="高级选项"
-          prop="is_specify_loc_turbines_initial"
+          prop="advanced"
         >
           <el-checkbox
-            v-model="form.is_specify_loc_turbines_initial"
+            :disabled="isStart"
+            v-model="form.advanced"
           ></el-checkbox>
         </el-form-item>
 
@@ -49,7 +50,7 @@
           prop="is_set_new_vel"
         >
           <el-checkbox
-            :disabled="!form.is_specify_loc_turbines_initial"
+            :disabled="isStart || !form.advanced"
             v-model="form.is_set_new_vel"
           ></el-checkbox>
         </el-form-item>
@@ -58,28 +59,28 @@
           prop="is_new_flow_field"
         >
           <el-checkbox
-            :disabled="!form.is_specify_loc_turbines_initial"
+            :disabled="isStart || !form.advanced"
             v-model="form.is_new_flow_field"
           ></el-checkbox>
         </el-form-item>
 
         <el-form-item label="seed_numpy" prop="seed_numpy">
-          <el-input :disabled="!form.is_specify_loc_turbines_initial" v-model="form.seed_numpy"></el-input>
+          <el-input :disabled="isStart || !form.advanced" v-model="form.seed_numpy"></el-input>
         </el-form-item>
         <el-form-item label="num_particles" prop="num_particles">
-          <el-input :disabled="!form.is_specify_loc_turbines_initial" v-model="form.num_particles"></el-input>
+          <el-input :disabled="isStart || !form.advanced" v-model="form.num_particles"></el-input>
         </el-form-item>
         <el-form-item label="fitness_initial" prop="fitness_initial">
-          <el-input :disabled="!form.is_specify_loc_turbines_initial" v-model="form.fitness_initial"></el-input>
+          <el-input :disabled="isStart || !form.advanced" v-model="form.fitness_initial"></el-input>
         </el-form-item>
       </div>
     </el-form>
 
     <div class="btn-list">
-      <el-button type="primary" @click="onStart" class="save-btn">
+      <el-button type="primary":disabled="isStart" @click="onStart" class="save-btn">
         新计算
       </el-button>
-      <el-button type="primary" @click="onContinue" class="save-btn">
+      <el-button type="primary":disabled="isStart" @click="onContinue" class="save-btn">
         继续计算
       </el-button>
     </div>
@@ -92,23 +93,24 @@ import Mixins from '../mixins';
 export default {
   name: 'PanelFirst',
   mixins: [Mixins],
+  props: ['isStart'],
   data() {
     return {
       form: {
-        parameters_turbine: '',
-        num_opt_iteration: '',
-        step_check: '',
-        name_to_save: '',
-        name_to_load: '',
-        is_specify_loc_turbines_initial: false,
+        dir_working: '/Users/wudong/Works/python/GUI_Version',
+        num_opt_iteration: 10,
+        step_check: 2,
+        name_to_save: 'Optimizer_2022_11_03',
+        name_to_load: 'Optimizer_2022_11_03',
+        advanced: true,
         is_set_new_vel: false,
         is_new_flow_field: false,
-        seed_numpy: '',
-        num_particles: '',
-        fitness_initial: '',
+        seed_numpy: 1,
+        num_particles: 3,
+        fitness_initial: 0.0,
       },
       rules: {
-        parameters_turbine: [
+        dir_working: [
           { required: true, message: '请选择', trigger: ['blur', 'change'] },
         ],
         num_opt_iteration: [
@@ -130,7 +132,13 @@ export default {
     validate() {
       return new Promise((resolve) => {
         this.$refs.form.validate((valid) => {
-          resolve(valid);
+          resolve({
+            valid,
+            form: {
+              ...this.form,
+              advanced: undefined,
+            },
+          });
         });
       });
     },
@@ -159,7 +167,7 @@ export default {
 
   .left,
   .right {
-    width: 600px;
+    width: 800px;
   }
 
   .tag-panel {

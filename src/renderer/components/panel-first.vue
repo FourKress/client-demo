@@ -9,14 +9,14 @@
     >
       <div class="left">
         <el-form-item label="parameters_turbine" prop="parameters_turbine">
-          <el-button type="primary" @click="onSelect('parameters_turbine')">
+          <el-button type="primary" :disabled="isStart || true" @click="onSelect('parameters_turbine')">
             选择
           </el-button>
           <div class="tag-panel" v-if="form.parameters_turbine.length">
             <el-tag
               v-for="path in form.parameters_turbine"
               :key="path"
-              closable
+              :closable="!isStart"
               @close="handlePathClose(path, 'parameters_turbine')"
             >
               {{ path }}
@@ -25,16 +25,13 @@
         </el-form-item>
 
         <el-form-item label="num_turbines" prop="num_turbines">
-          <el-input v-model="form.num_turbines"></el-input>
+          <el-input :disabled="isStart" v-model="form.num_turbines"></el-input>
         </el-form-item>
         <el-form-item label="dist_threshold" prop="dist_threshold">
-          <el-input v-model="form.dist_threshold"></el-input>
+          <el-input :disabled="isStart" v-model="form.dist_threshold"></el-input>
         </el-form-item>
         <el-form-item label="height_hub" prop="height_hub">
-          <el-input v-model="form.height_hub"></el-input>
-        </el-form-item>
-        <el-form-item label="name_to_load" prop="name_to_load">
-          <el-input v-model="form.name_to_load"></el-input>
+          <el-input :disabled="isStart" v-model="form.height_hub"></el-input>
         </el-form-item>
       </div>
       <div class="right">
@@ -44,6 +41,7 @@
           label-width="200px"
         >
           <el-checkbox
+            :disabled="isStart"
             v-model="form.is_specify_loc_turbines_initial"
           ></el-checkbox>
         </el-form-item>
@@ -62,21 +60,19 @@
         >
           <el-button
             type="primary"
-            :disabled="!form.is_specify_loc_turbines_initial"
-            @click="onSelect('dir_turbine_loc')"
+            :disabled="isStart || !form.is_specify_loc_turbines_initial"
+            @click="onSelectOnly('dir_turbine_loc')"
           >
             选择
           </el-button>
-          <div class="tag-panel" v-if="form.dir_turbine_loc.length">
-            <el-tag
-              v-for="path in form.dir_turbine_loc"
-              :key="path"
-              closable
-              @close="handlePathClose(path, 'dir_turbine_loc')"
-            >
-              {{ path }}
-            </el-tag>
-          </div>
+
+          <el-tag
+            v-if="form.dir_turbine_loc"
+            :closable="!isStart"
+            @close="handlePathCloseOnly('dir_turbine_loc')"
+          >
+            {{ form.dir_turbine_loc }}
+          </el-tag>
         </el-form-item>
       </div>
     </el-form>
@@ -89,21 +85,21 @@ import Mixins from '../mixins';
 export default {
   name: 'PanelFirst',
   mixins: [Mixins],
+  props: ['isStart'],
   data() {
     return {
       form: {
         parameters_turbine: [],
-        num_turbines: '',
-        dist_threshold: '',
-        height_hub: '',
-        name_to_load: '',
-        is_specify_loc_turbines_initial: false,
-        dir_turbine_loc: [],
+        num_turbines: 32,
+        dist_threshold: 281.6,
+        height_hub: 115,
+        is_specify_loc_turbines_initial: true,
+        dir_turbine_loc: '/Users/wudong/Works/python/settings/loc_turbines_initial.xlsx',
       },
       rules: {
-        parameters_turbine: [
-          { required: true, message: '请选择', trigger: ['blur', 'change'] },
-        ],
+        // parameters_turbine: [
+        //   { required: true, message: '请选择', trigger: ['blur', 'change'] },
+        // ],
         num_turbines: [
           { required: true, message: '请输入', trigger: ['blur', 'change'] },
         ],
@@ -113,9 +109,6 @@ export default {
         height_hub: [
           { required: true, message: '请输入', trigger: ['blur', 'change'] },
         ],
-        name_to_load: [
-          { required: true, message: '请输入', trigger: ['blur', 'change'] },
-        ],
       },
     };
   },
@@ -123,7 +116,13 @@ export default {
     validate() {
       return new Promise((resolve) => {
         this.$refs.form.validate((valid) => {
-          resolve(valid);
+          resolve({
+            valid,
+            form: {
+              ...this.form,
+              parameters_turbine: undefined,
+            },
+          });
         });
       });
     },
@@ -145,7 +144,7 @@ export default {
 
   .left,
   .right {
-    width: 600px;
+    width: 800px;
   }
 
   .tag-panel {
