@@ -1,6 +1,6 @@
 """This is the vtk module."""
 import sys
-sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\package')
+sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\package')
 
 if sys.version_info < (3,5):
     # imp is deprecated in 3.4

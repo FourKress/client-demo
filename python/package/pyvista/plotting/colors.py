@@ -3,7 +3,7 @@
 Used code from matplotlib.colors.  Thanks for your work!
 
 import sys
-sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\package')
+sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\package')
 
 SUPPORTED COLORS
 aliceblue

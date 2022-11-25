@@ -1,5 +1,5 @@
 import sys
-sys.path.append(r'C:\Users\wudong\WebstormProjects\client-demo\static\package')
+sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\package')
 
 import numpy as np
 import matplotlib.pyplot as plt
