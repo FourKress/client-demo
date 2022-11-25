@@ -189,16 +189,16 @@ export default {
     return {
       windList: ['212'],
       form: {
-        boundary_files: ['C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\settings\\boundary_0.xlsx'],
+        boundary_files: ['C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\settings\\boundary_0.xlsx'],
         wind_files: [
-          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_0.mat',
-          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_45.mat',
-          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_90.mat',
-          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_135.mat',
-          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_180.mat',
-          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_225.mat',
-          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_270.mat',
-          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_315.mat',
+          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_0.mat',
+          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_45.mat',
+          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_90.mat',
+          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_135.mat',
+          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_180.mat',
+          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_225.mat',
+          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_270.mat',
+          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\Data_zone_big_new\\wind_zone_big_new_20221030_angle_315.mat',
         ],
         wind_directions: [270.0, 225.0, 180.0, 135.0, 90.0, 45.0, 0.0, 315.0],
         wind_file_item: '',
@@ -210,10 +210,10 @@ export default {
         threshold_probability: 0.1,
 
         dir_ground_file:
-          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\Data_zone_big_new\\ground_zone_big_new_20221030.mat',
+          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\Data_zone_big_new\\ground_zone_big_new_20221030.mat',
         dir_mesh_file:
-          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\Data_zone_big_new\\mesh_zone_big_new_20221030.mat',
-        dir_measured_wind: 'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\settings\\vortex110.txt',
+          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\Data_zone_big_new\\mesh_zone_big_new_20221030.mat',
+        dir_measured_wind: 'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\settings\\vortex110.txt',
       },
       rules: {
         boundary_files: [

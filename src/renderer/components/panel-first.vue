@@ -102,7 +102,7 @@ export default {
         height_hub: 115,
         is_specify_loc_turbines_initial: true,
         dir_turbine_loc:
-          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\settings\\loc_turbines_initial.xlsx',
+          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\settings\\loc_turbines_initial.xlsx',
       },
       rules: {
         // parameters_turbine: [

@@ -45,32 +45,37 @@ ipcMain.on('start', (event, args) => {
   console.log(`参数: ${JSON.stringify(params)}`);
   console.log('————————开始PY进程————————');
 
-  const pyPath = `${path.join(
-    process.cwd(),
-    './python/FarmZone_2022_11_13_serial.py',
-  )}`;
-  const workerProcess = childProcess.spawn('python', [
-    `${pyPath}`,
-    `${JSON.stringify({
-      ...params,
-    })}`,
-  ]);
-
   // let pyPath = `${path.join(
-  //   __static,
-  //   './dist/FarmZone_2022_11_13_serial/FarmZone_2022_11_13_serial.exe',
+  //   process.cwd(),
+  //   './python/FarmZone_2022_11_13_serial.py',
   // )}`;
   // if (process.env.NODE_ENV !== 'development') {
   //   pyPath = path
-  //     .join(
-  //       __static,
-  //       '/dist/FarmZone_2022_11_13_serial/FarmZone_2022_11_13_serial.exe',
-  //     )
+  //     .join(__static, '/FarmZone_2022_11_13_serial.py')
   //     .replace('\\app.asar\\dist\\electron', '');
   // }
-  // const workerProcess = childProcess.spawn(`${pyPath}`, [
-  //   JSON.stringify(params),
+  // const workerProcess = childProcess.spawn('python', [
+  //   `${pyPath}`,
+  //   `${JSON.stringify({
+  //     ...params,
+  //   })}`,
   // ]);
+
+  let pyPath = `${path.join(
+    __static,
+    './dist/FarmZone_2022_11_13_serial/FarmZone_2022_11_13_serial.exe',
+  )}`;
+  if (process.env.NODE_ENV !== 'development') {
+    pyPath = path
+      .join(
+        __static,
+        '/dist/FarmZone_2022_11_13_serial/FarmZone_2022_11_13_serial.exe',
+      )
+      .replace('\\app.asar\\dist\\electron', '');
+  }
+  const workerProcess = childProcess.spawn(`${pyPath}`, [
+    JSON.stringify(params),
+  ]);
 
   const encoding = 'cp936';
   const binaryEncoding = 'binary';

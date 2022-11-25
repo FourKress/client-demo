@@ -97,7 +97,7 @@ export default {
   data() {
     return {
       form: {
-        dir_working: 'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\GUI_Version',
+        dir_working: 'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\GUI_Version',
         num_opt_iteration: 10,
         step_check: 2,
         name_to_save: 'Optimizer_2022_11_03',
