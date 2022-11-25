@@ -97,17 +97,17 @@ export default {
   data() {
     return {
       form: {
-        dir_working: 'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\GUI_Version',
-        num_opt_iteration: 10,
-        step_check: 2,
-        name_to_save: 'Optimizer_2022_11_03',
-        name_to_load: 'Optimizer_2022_11_03',
-        advanced: true,
+        dir_working: '',
+        num_opt_iteration: '',
+        step_check: '',
+        name_to_save: '',
+        name_to_load: '',
+        advanced: false,
         is_set_new_vel: false,
         is_new_flow_field: false,
-        seed_numpy: 1,
-        num_particles: 3,
-        fitness_initial: 0.0,
+        seed_numpy: '',
+        num_particles: '',
+        fitness_initial: '',
       },
       rules: {
         dir_working: [

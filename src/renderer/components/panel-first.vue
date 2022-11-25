@@ -97,12 +97,11 @@ export default {
     return {
       form: {
         parameters_turbine: [],
-        num_turbines: 32,
-        dist_threshold: 281.6,
-        height_hub: 115,
-        is_specify_loc_turbines_initial: true,
-        dir_turbine_loc:
-          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\settings\\loc_turbines_initial.xlsx',
+        num_turbines: '',
+        dist_threshold: '',
+        height_hub: '',
+        is_specify_loc_turbines_initial: false,
+        dir_turbine_loc: '',
       },
       rules: {
         // parameters_turbine: [
