@@ -1,6 +1,6 @@
 """Module containing pyvista wrappers for the vtk Charts API."""
 import sys
-sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\package')
+sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\package')
 
 from functools import wraps
 import inspect

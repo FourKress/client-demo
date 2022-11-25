@@ -16,7 +16,7 @@ the entire library.
 import sys
 import vtkmodules.all as vtk
 
-sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\python\\package')
+sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\package')
 
 
 try:
