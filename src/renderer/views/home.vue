@@ -16,7 +16,7 @@
     </el-tabs>
 
     <div class="dynamic-output">
-      <p v-for="(msg, index) in msgList" :key="index">{{ msg }} {{ index }}</p>
+      <p v-for="(msg, index) in msgList" :key="index">{{ msg }}</p>
     </div>
 
     <el-button
@@ -172,6 +172,9 @@ export default {
       ipcRenderer.once(`close_${this.startCount}`, (event, data) => {
         console.log(event, data);
         this.msgList.push(data);
+        if (data.includes('退出码')) {
+          this.isStart = false;
+        }
       });
     },
     //

@@ -1,4 +1,4 @@
-date:2022-11-23 23:10:51
+date:2022-11-25 02:06:11
 seed:1
 num_points:32
 num_particles:3
@@ -17,7 +17,7 @@ c2e:2.5
 w:0.9
 ws:0.9
 we:0.4
-fitness_gbest:-1201.1675138281898
+fitness_gbest:-1201.167513801891
 index:0
 num_pbest_changed:3
 num_gbest_changed:3

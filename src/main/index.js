@@ -47,27 +47,30 @@ ipcMain.on('start', (event, args) => {
   console.log('————————开始PY进程————————');
 
   // let pyPath = `${path.join(__static, './FarmZone_2022_11_13_serial.py')}`;
-  let pyPath = '/Users/wudong/Works/python/FarmZone_2022_11_13_serial.py';
-  if (process.env.NODE_ENV !== 'development') {
-    pyPath = path
-      .join(__static, '/FarmZone_2022_11_13_serial.py')
-      .replace('\\app.asar\\dist\\electron', '');
-  }
-  const workerProcess = childProcess.spawn('python3', [
-    `${pyPath}`,
-    `${JSON.stringify({
-      ...params,
-    })}`,
-  ]);
-
-  // let pyPath = `${path.join(__static, './demo.exe')}`;
   // if (process.env.NODE_ENV !== 'development') {
-  //   pyPath = path.join(__static, '/demo.exe')
+  //   pyPath = path
+  //     .join(__static, '/FarmZone_2022_11_13_serial.py')
   //     .replace('\\app.asar\\dist\\electron', '');
   // }
-  // const workerProcess = childProcess.spawn(`${pyPath}`, [
-  //   ...params,
+  // const workerProcess = childProcess.spawn('python', [
+  //   `${pyPath}`,
+  //   `${JSON.stringify({
+  //     ...params,
+  //   })}`,
   // ]);
+
+  let pyPath = `${path.join(
+    __static,
+    './dist/FarmZone_2022_11_13_serial.exe',
+  )}`;
+  if (process.env.NODE_ENV !== 'development') {
+    pyPath = path
+      .join(__static, '/dist/FarmZone_2022_11_13_serial.exe')
+      .replace('\\app.asar\\dist\\electron', '');
+  }
+  const workerProcess = childProcess.spawn(`${pyPath}`, [
+    JSON.stringify(params),
+  ]);
 
   const encoding = 'cp936';
   const binaryEncoding = 'binary';
@@ -83,8 +86,8 @@ ipcMain.on('start', (event, args) => {
     event.sender.send(`stderr_${index}`, result.toString());
   });
   workerProcess.on('close', (code) => {
-    console.log(`PY子进程已退出，退出码 ${code}`);
-    event.sender.send(`close_${index}`, `PY子进程已退出，退出码 ${code}`);
+    console.log(`计算结束，退出码 ${code}`);
+    event.sender.send(`close_${index}`, `计算结束，退出码 ${code}`);
   });
 });
 

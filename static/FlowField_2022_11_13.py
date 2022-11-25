@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import scipy.interpolate as interpolate
 import scipy.io as scio
-import pyvista as pv
+import sys
 
+sys.path.append(r'C:\Users\wudong\WebstormProjects\client-demo\static\package')
+import pyvista as pv
 
 class FlowField():
 
@@ -38,7 +40,7 @@ class FlowField():
         self.num_x = 0
         self.num_y = 0
         self.num_z = 0
-        # mesh: including wind field information 
+        # mesh: including wind field information
         self.wind_mesh = []
         self.l_points_forming_line = []
         self.l_list_lines = []
@@ -965,17 +967,17 @@ if __name__ == '__main__':
 # for i in range(num_locations):
 #     assign_locations() # of the turbines
 #     for j in range(num_wind_directions):
-#         update_wind_mesh() 
+#         update_wind_mesh()
 #         get_streamlines_3D_for_all()
 #         calculate_wind_reduction_for_all()
 #     pass
-# pass      
+# pass
 # =============================================================================
 
 # =============================================================================
 #     segment = np.array([[0, 0, 0],[2, 2, 2]])
 #     point = np.array([2.5,1.5,0])
 #     normal = np.array([1,1,0])
-#     dist = FlowField.check_if_p_in_affected_zone(segment,point,normal)  
-#     print(dist)        
+#     dist = FlowField.check_if_p_in_affected_zone(segment,point,normal)
+#     print(dist)
 # =============================================================================

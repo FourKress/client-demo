@@ -9,7 +9,11 @@
     >
       <div class="left">
         <el-form-item label="parameters_turbine" prop="parameters_turbine">
-          <el-button type="primary" :disabled="isStart || true" @click="onSelect('parameters_turbine')">
+          <el-button
+            type="primary"
+            :disabled="isStart || true"
+            @click="onSelect('parameters_turbine')"
+          >
             选择
           </el-button>
           <div class="tag-panel" v-if="form.parameters_turbine.length">
@@ -28,7 +32,10 @@
           <el-input :disabled="isStart" v-model="form.num_turbines"></el-input>
         </el-form-item>
         <el-form-item label="dist_threshold" prop="dist_threshold">
-          <el-input :disabled="isStart" v-model="form.dist_threshold"></el-input>
+          <el-input
+            :disabled="isStart"
+            v-model="form.dist_threshold"
+          ></el-input>
         </el-form-item>
         <el-form-item label="height_hub" prop="height_hub">
           <el-input :disabled="isStart" v-model="form.height_hub"></el-input>
@@ -94,7 +101,8 @@ export default {
         dist_threshold: 281.6,
         height_hub: 115,
         is_specify_loc_turbines_initial: true,
-        dir_turbine_loc: '/Users/wudong/Works/python/settings/loc_turbines_initial.xlsx',
+        dir_turbine_loc:
+          'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\settings\\loc_turbines_initial.xlsx',
       },
       rules: {
         // parameters_turbine: [
