@@ -120,8 +120,6 @@ export default {
       });
     },
     handleStart(isContinue) {
-      console.log(isContinue);
-      this.isStart = true;
       Promise.all([
         this.$refs.PanelFirst.validate(),
         this.$refs.PanelSecond.validate(),
@@ -156,6 +154,7 @@ export default {
     },
     onStart(params) {
       this.msgList = [];
+      this.isStart = true;
       this.startCount++;
       ipcRenderer.send('start', [this.startCount, params]);
 
