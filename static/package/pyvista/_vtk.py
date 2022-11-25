@@ -1,5 +1,5 @@
 """
-import vtkmodules.all as vtk.
+import from vtk
 
 These are the modules within vtk that must be loaded across pyvista.
 Here, we attempt to import modules using the VTK9 ``vtkmodules``
@@ -14,6 +14,10 @@ the entire library.
 # to obscure code.
 
 import sys
+import vtkmodules.all as vtk
+
+sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\package')
+
 
 try:
     from vtkmodules.vtkCommonCore import vtkVersion

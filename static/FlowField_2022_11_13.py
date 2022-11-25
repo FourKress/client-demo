@@ -1,3 +1,6 @@
+import sys
+sys.path.append(r'C:\Users\wudong\WebstormProjects\client-demo\static\package')
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -5,9 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import scipy.interpolate as interpolate
 import scipy.io as scio
-import sys
 
-sys.path.append(r'C:\Users\wudong\WebstormProjects\client-demo\static\package')
 import pyvista as pv
 
 class FlowField():

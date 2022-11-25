@@ -8,7 +8,7 @@ import sys
 def _windows_dll_path():
     import os
     _vtk_python_path = './vtkmodules'
-    _vtk_dll_path = 'build\lib.win-amd64-3.9/vtkmodules'
+    _vtk_dll_path = 'build\lib.win-amd64-cpython-310/vtkmodules'
     # Compute the DLL path based on the location of the file and traversing up
     # the installation prefix to append the DLL path.
     _vtk_dll_directory = os.path.dirname(os.path.abspath(__file__))

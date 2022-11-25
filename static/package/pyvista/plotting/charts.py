@@ -1,4 +1,6 @@
 """Module containing pyvista wrappers for the vtk Charts API."""
+import sys
+sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\package')
 
 from functools import wraps
 import inspect
@@ -9,11 +11,11 @@ import weakref
 
 import numpy as np
 
-import pyvista
-from pyvista import _vtk
-
 from .colors import Color, color_synonyms, hexcolors
 
+import pyvista
+
+from pyvista import _vtk
 
 # region Some metaclass wrapping magic
 # Note: these classes can be removed once VTK 9.2 is released.

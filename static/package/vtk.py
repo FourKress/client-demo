@@ -1,5 +1,6 @@
 """This is the vtk module."""
 import sys
+sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\package')
 
 if sys.version_info < (3,5):
     # imp is deprecated in 3.4
@@ -27,16 +28,19 @@ if sys.version_info < (3,5):
 
 else:
     import importlib
-    # import vtkmodules.all
-    all_m = importlib.import_module('vtkmodules.all')
+
+
+
+    import vtkmodules.all as all
+    # all_m = importlib.import_module('vtkmodules.all')
 
     # import vtkmodules
-    vtkmodules_m = importlib.import_module('vtkmodules')
+    # vtkmodules_m = importlib.import_module('vtkmodules')
 
     # make vtkmodules.all act as the vtkmodules package to support importing
     # other modules from vtkmodules package via `vtk`.
-    all_m.__path__ = vtkmodules_m.__path__
-    all_m.__version__ = vtkmodules_m.__version__
+    # all_m.__path__ = vtkmodules_m.__path__
+    # all_m.__version__ = vtkmodules_m.__version__
 
     # replace old `vtk` module with the `all` package.
-    sys.modules[__name__] = all_m
+    sys.modules[__name__] = all

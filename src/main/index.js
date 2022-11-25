@@ -61,11 +61,14 @@ ipcMain.on('start', (event, args) => {
 
   let pyPath = `${path.join(
     __static,
-    './dist/FarmZone_2022_11_13_serial.exe',
+    './dist/FarmZone_2022_11_13_serial/FarmZone_2022_11_13_serial.exe',
   )}`;
   if (process.env.NODE_ENV !== 'development') {
     pyPath = path
-      .join(__static, '/dist/FarmZone_2022_11_13_serial.exe')
+      .join(
+        __static,
+        '/dist/FarmZone_2022_11_13_serial/FarmZone_2022_11_13_serial.exe',
+      )
       .replace('\\app.asar\\dist\\electron', '');
   }
   const workerProcess = childProcess.spawn(`${pyPath}`, [
