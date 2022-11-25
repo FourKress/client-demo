@@ -1,5 +1,8 @@
 import sys
-sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\package')
+import os
+print(os.getcwd())
+sys.stdout.flush()
+sys.path.append(os.getcwd() + '/resources/static/package')
 
 import numpy as np
 import matplotlib.pyplot as plt

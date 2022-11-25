@@ -15,14 +15,12 @@ the entire library.
 
 import sys
 import vtkmodules.all as vtk
-
-sys.path.append(r'C:\\Users\\wudong\\WebstormProjects\\client-demo\\static\\package')
+import os
+sys.path.append(os.getcwd() + '/resources/static/package')
 
 
 try:
     from vtkmodules.vtkCommonCore import vtkVersion
-    print(vtkVersion().GetVTKMajorVersion())
-    sys.stdout.flush()
     VTK9 = vtkVersion().GetVTKMajorVersion() >= 9
 except ImportError:  # pragma: no cover
     VTK9 = False
@@ -35,14 +33,8 @@ if VTK9:
     # VTK commit d9981b9aeb93b42d1371c6e295d76bfdc18430bd
     try:
         from vtkmodules.vtkFiltersCore import vtkExtractEdges
-        print('vtkFiltersCore')
-        print(vtkExtractEdges)
-        sys.stdout.flush()
     except ImportError:
         from vtkmodules.vtkFiltersExtraction import vtkExtractEdges
-        print('vtkFiltersExtraction')
-        print(vtkExtractEdges)
-        sys.stdout.flush()
 
     # vtkCellTreeLocator moved from vtkFiltersGeneral to vtkCommonDataModel in
     # VTK commit 4a29e6f7dd9acb460644fe487d2e80aac65f7be9

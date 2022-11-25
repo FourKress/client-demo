@@ -45,10 +45,7 @@ ipcMain.on('start', (event, args) => {
   console.log(`参数: ${JSON.stringify(params)}`);
   console.log('————————开始PY进程————————');
 
-  // let pyPath = `${path.join(
-  //   process.cwd(),
-  //   './python/FarmZone_2022_11_13_serial.py',
-  // )}`;
+  // let pyPath = `${path.join(__static, './FarmZone_2022_11_13_serial.py')}`;
   // if (process.env.NODE_ENV !== 'development') {
   //   pyPath = path
   //     .join(__static, '/FarmZone_2022_11_13_serial.py')
